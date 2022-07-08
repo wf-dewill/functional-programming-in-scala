@@ -1,7 +1,7 @@
 object Chapter4 extends App {
   /*
   * Exception handling in programs
-  * Scala has better wayss of handling exceptions than just a try catch block
+  * Scala has better ways of handling exceptions than just a try catch block
   * Such as Option, Either, Try etc.
   * Pattern matchable
   * */
@@ -51,28 +51,39 @@ object Chapter4 extends App {
   def sequence2[A](a: List[Option[A]]): Option[List[A]] =
     traverse(a)(aa => aa)
 
+
+
+
+
+
   /* Ex. 4.6 */
   trait Either[+E, +A] {
+
     def map[B](f: A => B): Either[E, B] = this match {
       case Right(a) => Right(f(a))
       case Left(b) => Left(b)
     }
+
     def flatMap[EE >: E, B](f: A => Either[EE, B]): Either[EE, B] = {
       this match {
         case Right(a) => f(a)
         case Left(b) => Left(b)
       }
     }
+
     def orElse[EE >: E,B >: A](b: => Either[EE, B]): Either[EE, B] = {
       this match {
         case Right(a) => Right(a)
         case Left(_) => b
       }
     }
+
     def map2[EE >: E, B, C](b: Either[EE, B])(f: (A, B) => C): Either[EE, C] = {
       this flatMap {elem => b map {c => f(elem, c)}}
     }
+
   }
+
   case class Left[+E](value: E) extends Either[E, Nothing]
   case class Right[+A](value: A) extends Either[Nothing, A]
 
@@ -101,8 +112,8 @@ object Chapter4 extends App {
   }
 
   /* Ex. 4.8 */
-  // Could change signature of map2 to
-  // map2[EE >: E, B, C](b: Either[EE, B])(f: (A, B) => C): Either[(EE, E), C]
-  // Or could change map2 to actually concatenate the strings, but thats less general
+  // Could change signature of mapUnfold to
+  // mapUnfold[EE >: E, B, C](b: Either[EE, B])(f: (A, B) => C): Either[(EE, E), C]
+  // Or could change mapUnfold to actually concatenate the strings, but thats less general
   //
 }

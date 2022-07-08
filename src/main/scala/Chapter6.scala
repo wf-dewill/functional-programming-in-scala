@@ -70,8 +70,7 @@ object Chapter6 extends App {
 
   type Rand[+A] = RNG => (A, RNG)
   val int: Rand[Int] = _.nextInt
-  def unit[A](a: A): Rand[A] =
-    rng => (a, rng)
+  def unit[A](a: A): Rand[A] = (a, _)
   def map[A, B](s: Rand[A])(f: A => B): Rand[B] = {
     rng => {
       val (a, rng2) = s(rng)
@@ -84,7 +83,7 @@ object Chapter6 extends App {
 
   /* Ex. 6.5 */
   def doubleNew(rng: Rand[Int]): Rand[Double] = {
-    map(rng)(i => i/Int.MaxValue.toDouble+1)
+    map(rng)(_/Int.MaxValue.toDouble+1)
   }
 
   /* Ex. 6.6 */
